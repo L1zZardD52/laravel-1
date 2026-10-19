@@ -10,8 +10,13 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+
             $table->string('name');
+
+            // Адрес категории должен быть уникальным.
             $table->string('slug')->unique();
+
+            // Создание и обновление записи.
             $table->timestamps();
         });
     }

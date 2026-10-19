@@ -2,22 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    // Показываем форму регистрации.
     public function showRegister()
     {
         return view('auth.register');
     }
 
+    // Регистрируем нового пользователя.
     public function register(Request $request)
     {
+        // Проверяем введённые данные.
         $data = $request->validate([
-            'login' => ['required', 'string', 'min:3', 'max:30', 'alpha_dash', 'unique:users,login'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'login' => [
+                'required',
+                'string',
+                'min:3',
+                'max:30',
+                'alpha_dash',
+                'unique:users,login',
+            ],
+            'password' => [
+                'required',
+                'string',
+                'min:6',
+                'confirmed',
+            ],
         ], [
             'login.required' => 'Введите логин.',
             'login.min' => 'Логин не короче 3 символов.',
@@ -29,18 +45,34 @@ class AuthController extends Controller
             'password.confirmed' => 'Пароли не совпадают.',
         ]);
 
-        $user = User::create($data);
+        // Находим роль обычного читателя.
+        $readerRole = Role::where('name', 'reader')->firstOrFail();
+
+        // Создаём пользователя с ролью читателя.
+        $user = User::create([
+            'login' => $data['login'],
+            'password' => $data['password'],
+            'role_id' => $readerRole->id,
+        ]);
+
+        // Авторизуем пользователя после регистрации.
         Auth::login($user);
+
+        // Обновляем идентификатор сессии для безопасности.
         $request->session()->regenerate();
 
-        return redirect()->route('home')->with('status', 'Регистрация прошла успешно.');
+        return redirect()
+            ->route('home')
+            ->with('status', 'Регистрация прошла успешно.');
     }
 
+    // Показываем форму входа.
     public function showLogin()
     {
         return view('auth.login');
     }
 
+    // Выполняем вход.
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -53,18 +85,24 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
             return redirect()->intended(route('home'));
         }
 
-        return back()->withErrors(['login' => 'Неверный логин или пароль.'])->onlyInput('login');
+        return back()
+            ->withErrors(['login' => 'Неверный логин или пароль.'])
+            ->onlyInput('login');
     }
 
+    // Завершаем сеанс пользователя.
     public function logout(Request $request)
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect()->route('home');
     }
 }
+// при регистрации роль теперь назначается сервером, а не берётся из формы пользователя.
