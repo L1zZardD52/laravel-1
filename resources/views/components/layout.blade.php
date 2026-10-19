@@ -10,6 +10,9 @@
     <x-header /> <!-- x-header - компонент, который подключается в layout.blade.php (верхняя часть страницы) -->
 
     <main class="container main">
+        @if (session('status'))
+            <div class="alert">{{ session('status') }}</div>
+        @endif
         {{ $slot }} <!-- $slot - переменная, которая передается в компонент layout и содержит контент страницы -->
     </main>
 

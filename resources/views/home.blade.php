@@ -8,12 +8,12 @@
     <section class="grid">
 
         <!-- Цикл foreach: берёт по одной новости из списка news и называет её item -->
-        @foreach ($news as $item)
-
-            <!-- Выводим одну карточку и передаём ей новость item (двоеточие перед item обязательно) -->
-            <x-news-card :item="$item" />
-
-        @endforeach
+        @forelse ($articles as $article)
+            <x-news-card :article="$article" />
+        @empty
+            <p>Статей пока нет.</p>
+        @endforelse
 
     </section>
+    {{ $articles->links() }}
 </x-layout>

@@ -11,6 +11,17 @@
             <a href="{{ route('category') }}" class="{{ request()->routeIs('category') ? 'active' : '' }}">Категория</a>
             <a href="{{ route('journalist') }}" class="{{ request()->routeIs('journalist') ? 'active' : '' }}">Журналист</a>
             <a href="{{ route('admin') }}" class="{{ request()->routeIs('admin') ? 'active' : '' }}">Админ</a>
+        @auth
+                <span class="nav__user">{{ auth()->user()->login }}</span>
+                <form action="{{ route('logout') }}" method="POST" class="nav__form">
+                    @csrf
+                    <button type="submit" class="nav__btn">Выйти</button>
+                </form>
+            @endauth
+            @guest
+                <a href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'active' : '' }}">Вход</a>
+                <a href="{{ route('register') }}" class="{{ request()->routeIs('register') ? 'active' : '' }}">Регистрация</a>
+            @endguest
         </nav>
 
     </div>

@@ -1,22 +1,16 @@
-@props(['item'])
+@props(['article'])
 
-<!-- Одна карточка новости. Данные приходят в переменной item (одна новость из списка) -->
 <article class="card">
-
-    <!-- Место под картинку -->
-    <div class="card__img">Фото</div>
-
     <div class="card__body">
-        <!-- Категория новости -->
-        <span class="badge">{{ $item['category'] }}</span>
+        <a href="{{ route('category.show', $article->category) }}" class="badge">{{ $article->category->name }}</a>
 
-        <!-- Заголовок новости -->
-        <h3 class="card__title">{{ $item['title'] }}</h3>
+        <h3 class="card__title"><a href="{{ route('articles.show', $article) }}">{{ $article->title }}</a></h3>
 
-        <!-- Текст новости -->
-        <p class="card__text">{{ $item['text'] }}</p>
+        <p class="card__text">{{ \Illuminate\Support\Str::limit($article->content, 120) }}</p>
 
-        <!-- Дата новости -->
-        <time class="card__date">{{ $item['date'] }}</time>
+        <div class="card__meta">
+            <span>Автор: {{ $article->user->login }}</span>
+            <time>{{ $article->published_at->format('d.m.Y') }}</time>
+        </div>
     </div>
 </article>

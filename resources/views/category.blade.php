@@ -1,12 +1,20 @@
-<!-- То же самое, что главная, только заголовок Категория: {{ $name }} показывает выбранную категорию 
-в $news приходят уже отфильтрованные новости-->
-<x-layout title="Категория — GameNews">
-    <h1 class="page-title">Категория: {{ $name }}</h1>
+<x-layout :title="'Категория ' . $category->name . ' — GameNews'">
+    <h1 class="page-title">Категория: {{ $category->name }}</h1>
     <p class="subtitle">Новости только из выбранной категории.</p>
 
-    <section class="grid">
-        @foreach ($news as $item)
-            <x-news-card :item="$item" />
+    <div class="chips">
+        @foreach ($categories as $c)
+            <a href="{{ route('category.show', $c) }}" class="chip {{ $c->id === $category->id ? 'chip--active' : '' }}">{{ $c->name }}</a>
         @endforeach
+    </div>
+
+    <section class="grid">
+        @forelse ($articles as $article)
+            <x-news-card :article="$article" />
+        @empty
+            <p>В этой категории пока нет статей.</p>
+        @endforelse
     </section>
+
+    {{ $articles->links() }}
 </x-layout>

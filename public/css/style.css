@@ -38,7 +38,7 @@ a { color: inherit; text-decoration: none; }
 .form--wide { max-width: none; }
 .form__group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
 .form label { font-weight: bold; font-size: 14px; }
-input[type=text], select, textarea { padding: 10px; border: 1px solid #c5cbd6; border-radius: 6px; font: inherit; width: 100%; }
+input[type=text], input[type=password], select, textarea { padding: 10px; border: 1px solid #c5cbd6; border-radius: 6px; font: inherit; width: 100%; }
 input:focus, select:focus, textarea:focus { outline: 2px solid #00e676; border-color: #00e676; }
 .form__actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
@@ -62,3 +62,31 @@ input:focus, select:focus, textarea:focus { outline: 2px solid #00e676; border-c
 @media (max-width: 600px) {
     .page-title { font-size: 22px; }
 }
+
+.nav__user { padding: 8px 10px; color: #00e676; }
+.nav__form { display: inline; }
+.nav__btn { padding: 8px 14px; border: 0; border-radius: 6px; background: transparent; color: #fff; font: inherit; cursor: pointer; }
+.nav__btn:hover { background: #00e676; color: #1b1030; }
+
+.alert { background: #d9f7e6; border: 1px solid #00c764; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; }
+.form__error { color: #c62828; font-size: 13px; }
+.form--narrow { max-width: 420px; }
+.form__hint { margin-top: 14px; font-size: 14px; color: #666; }
+.form__hint a { color: #33205a; text-decoration: underline; }
+
+.card__title a:hover { text-decoration: underline; }
+.card__meta { display: flex; justify-content: space-between; color: #999; font-size: 13px; }
+
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.chip { padding: 6px 14px; border-radius: 20px; background: #fff; border: 1px solid #c5cbd6; font-size: 14px; }
+.chip--active, .chip:hover { background: #1b1030; color: #fff; border-color: #1b1030; }
+
+.article { background: #fff; padding: 24px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.08); max-width: 800px; }
+.article .badge { display: inline-block; margin-bottom: 10px; }
+.article__text { margin: 16px 0 24px; line-height: 1.7; }
+
+.pagination { display: flex; gap: 6px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
+.pagination__item { min-width: 38px; padding: 8px 12px; text-align: center; border: 1px solid #c5cbd6; border-radius: 6px; background: #fff; }
+a.pagination__item:hover { background: #eef1f6; }
+.pagination__item.active { background: #1b1030; color: #fff; border-color: #1b1030; }
+.pagination__item.disabled { color: #aaa; }
