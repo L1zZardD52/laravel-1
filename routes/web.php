@@ -1,5 +1,6 @@
 <?php
 // use - подключение класса
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController; // контроллер статей: главная, категория, журналист
 use App\Http\Controllers\AuthController; // контроллер входа, регистрации и выхода
 use Illuminate\Support\Facades\Route; // подключение класса Route
@@ -24,8 +25,36 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/journalist', [ArticleController::class, 'journalist'])->name('journalist');
-    Route::post('/journalist/articles', [ArticleController::class, 'store'])->name('articles.store');
-    Route::get('/journalist/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
-    Route::put('/journalist/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
+    // Журналистам доступны их статьи; администратор тоже проходит эту проверку.
+    Route::middleware('role:journalist')->group(function () {
+        Route::get('/journalist', [ArticleController::class, 'journalist'])
+            ->name('journalist');
+
+        Route::post('/journalist/articles', [ArticleController::class, 'store'])
+            ->name('articles.store');
+
+        Route::get('/journalist/articles/{article}/edit', [ArticleController::class, 'edit'])
+            ->name('articles.edit');
+
+        Route::put('/journalist/articles/{article}', [ArticleController::class, 'update'])
+            ->name('articles.update');
+    });
+
+    // Все маршруты админки доступны только администратору.
+    Route::middleware('role:admin')
+        ->prefix('admin')
+        ->name('admin.')
+        ->group(function () {
+            Route::get('/', [AdminController::class, 'index'])
+                ->name('index');
+
+            Route::patch('/articles/{article}/toggle', [AdminController::class, 'toggleArticle'])
+                ->name('articles.toggle');
+
+            Route::delete('/articles/{article}', [AdminController::class, 'destroyArticle'])
+                ->name('articles.destroy');
+
+            Route::patch('/users/{user}/role', [AdminController::class, 'updateRole'])
+                ->name('users.role');
+        });
 });
